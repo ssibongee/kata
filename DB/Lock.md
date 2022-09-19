@@ -147,3 +147,8 @@
   - Write Lock을 취득했다면 트랜잭션이 Commit, Rollback 할 때 Lock을 반환한다.
 - Strong Strict 2PL(SS2PL, Rigorous 2PL) : Strict Schedule을 보장하는 2PL 프로토콜로, S2PL과 동일하지만 Read Lock 또한 트랜잭션이 Commit, Rollback할 때 반환한다.
   - S2PL보다 구현이 쉽지만, Lock의 범위가 길어진다는 단점이 있다.
+
+### 2PL 방식의 문제점
+- S2PL, SS2PL은 초창기 RDBMS에서 가장 많이 사용되는 구현방식이지만 Read → Read를 제외하고는 한 쪽이 Block 되기 때문에 전체 처리량이 좋지 않다.
+- Read와 Write가 서로를 Block하는 것만이라도 해결하기 위해서 나온 방식이 MVCC(Multiversion Concurrency Control)이다.
+- 오늘날의 RDBMS는 Lock과 MVCC를 혼용해서 사용한다.
