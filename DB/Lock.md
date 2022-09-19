@@ -136,3 +136,14 @@
 | STEP 4 | X-Lock(X) // Block |                    |
 | STEP 5 |                    | Read(X) // X = 100 |
 | STEP 6 |                    | X-Lock(Y) // Block |
+
+### 2PL 프로토콜의 여러가지 종류
+- Conservative 2PL : 모든 Lock을 취득한 다음 트랜잭션을 시작한다.
+  - Deadlock Free한 알고리즘이다.
+  - 트랜잭션에서 필요로하는 모든 Lock을 취득한 다음에 수행가능하기 때문에 트랜잭션 실행 자체가 느려질 수 있고, 실용적이지 않다.
+- Strict 2PL(S2PL) : Strict Schedule을 보장하는 2PL 프로토콜이다.
+  - Recoverability를 보장한다. (Rollback이 발생했을 때 Anomaly가 발생하지 않도록 한다.)
+  - Strict Schedule이란 어떤 데이터에 대해서 Write하는 트랜잭션이 있다면, 해당 트랜잭션이 Commit, Rollback이 되기 전까지 다른 트랜잭션이 그 데이터에 대해서 Read, Write 하지 않는다. 
+  - Write Lock을 취득했다면 트랜잭션이 Commit, Rollback 할 때 Lock을 반환한다.
+- Strong Strict 2PL(SS2PL, Rigorous 2PL) : Strict Schedule을 보장하는 2PL 프로토콜로, S2PL과 동일하지만 Read Lock 또한 트랜잭션이 Commit, Rollback할 때 반환한다.
+  - S2PL보다 구현이 쉽지만, Lock의 범위가 길어진다는 단점이 있다.
