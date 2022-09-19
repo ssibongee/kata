@@ -98,3 +98,31 @@
 | STEP 12 | Read(X) // X = 100          |                             |
 | STEP 13 | Write(X = X + Y) // X = 400 |                             |
 | STEP 14 | Unlock(X)                   |                             |
+
+- Tx1이 먼저 실행된다면 STEP 10, STEP 11에 의해 잠재적으로 문제가 발생할 수 있기 때문에 STEP 10과 STEP 11의 순서를 바꿔주어야한다.
+
+| Step    | Tx1                         | Tx2                         |
+|---------|-----------------------------|-----------------------------|
+| STEP 1  |                             | S-Lock(X)                   |
+| STEP 2  |                             | Read(X) // X = 100          |
+| STEP 3  |                             | X-Lock(Y)                   |
+| STEP 4  | S-Lock(Y) // Block          |                             |
+| STEP 5  |                             | Unlock(X)                   |
+| STEP 6  |                             | Read(Y) // Y = 200          |
+| STEP 7  |                             | Write(Y = X + Y) // Y = 300 |
+| STEP 8  |                             | Unlock(Y)                   |
+| STEP 9  | Read(Y) // Y = 300          |                             |
+| STEP 10 | X-Lock(X)                   |                             |
+| STEP 11 | Unlock(Y)                   |                             |
+| STEP 12 | Read(X) // X = 100          |                             |
+| STEP 13 | Write(X = X + Y) // X = 400 |                             |
+| STEP 14 | Unlock(X)                   |                             |
+
+- Anomaly 현상을 방지하기 위해서는 각각의 트랜잭션에서 Locking 관련된 오퍼레이션이 최초의 Unlock 오퍼레이션보다 먼저 수행되도록 해야한다.
+- 이러한 프로토콜을 2PL(Two-Phase Locking)이라고한다.
+
+### 2PL(Two-Phase Locking)
+- 2PL프로토콜은 프로토콜의 이름처럼 Expanding Phase와 Shrinking Phase로 구성되어있다.
+- Expanding Phase(Growing Phase) : Lock을 취득하기만하고 반환하지는 않는 Phase
+- Shrinking Phase(Contracting Phase) : Lock을 반환하기만하고 취득하지는 않는 Phase
+- 즉, 2PL 프로토콜은 트랜잭션에서 모든 Locking 오퍼레이션이 최초의 Unlock 오퍼레이션보다 먼저 수행되도록 하는 것이고, 한번 Unlock을 시작하면 새로운 Lock을 획득하지 않는다고 볼 수 있다.
