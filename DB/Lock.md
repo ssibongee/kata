@@ -126,3 +126,13 @@
 - Expanding Phase(Growing Phase) : Lock을 취득하기만하고 반환하지는 않는 Phase
 - Shrinking Phase(Contracting Phase) : Lock을 반환하기만하고 취득하지는 않는 Phase
 - 즉, 2PL 프로토콜은 트랜잭션에서 모든 Locking 오퍼레이션이 최초의 Unlock 오퍼레이션보다 먼저 수행되도록 하는 것이고, 한번 Unlock을 시작하면 새로운 Lock을 획득하지 않는다고 볼 수 있다.
+- 단, 상황에 따라서 2PL 프로토콜을 수행하면 데드락이 발생할 수 있다.
+
+| STEP   | Tx1                | Tx2                |
+|--------|--------------------|--------------------|
+| STEP 1 |                    | S-Lock(X)          |
+| STEP 2 | S-Lock(Y)          |                    |
+| STEP 3 | Read(Y) // Y = 200 |                    |
+| STEP 4 | X-Lock(X) // Block |                    |
+| STEP 5 |                    | Read(X) // X = 100 |
+| STEP 6 |                    | X-Lock(Y) // Block |
